@@ -1,5 +1,10 @@
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import java.util.Queue;
+import java.util.TreeMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class RedBlackBST<Key extends Comparable<Key>, Value> {
     public static final boolean RED = true;
@@ -368,17 +373,43 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     public String toString() {
-        String temp = toString(root);
-        temp = temp.substring(0, temp.length() - 2);
-        return "{" + temp + "}";
+        return print2DUtil2(root, 0, "");
     }
 
-    private String toString(Node<Key, Value> n) {
-        if (n == null) return "";
-        return toString(n.getBig()) +
-                n.getKey() + "=" + n.getValue() + ", " +
-                toString(n.getSmall());
+    private String print2DUtil2(Node root, int space, String exToReturn)//the internet gifted me this:) (with some edits of course)
+    {
+        if (root == null)
+            return "";
+
+        String toReturn="";
+        // Process right child first
+        toReturn+= print2DUtil2(root.small, space + 3, toReturn);
+
+        // Print current node after space
+        // cou
+        //System.out.println();
+        for (int i = 0; i < space ; i++)
+            //System.out.print(" ");
+            toReturn += " ";
+        if(root.COLOR) toReturn += "R:";
+        else toReturn += "B:";
+        toReturn +=  root.value+"\n";
+        //System.out.println(root.value);
+
+        // Process left child
+        toReturn+= print2DUtil2(root.big, space + 3, toReturn);
+
+        return toReturn;
+    }
+
+    public boolean isGrandparent(Node check){//key of node looking for
+        if(check.getBig() == null &  check.getSmall() == null)return false;//no children
+        else if(check.getSmall() == null && (check.getBig().getBig() == null && check.getBig().getSmall() == null))return false;//1 child is null, other has 2 null children
+        else if(check.getBig() == null && (check.getSmall().getBig() == null && check.getSmall().getSmall() == null))return false;
+        else return true;
     }
 
 }
+
+
 
